@@ -24,6 +24,17 @@ body {
 
 .factory-scene {
   --state: #{$amber};
+  --gear-xl-speed: 8s;
+  --gear-mid-speed: 5s;
+  --gear-small-speed: 3.5s;
+  --piston-speed: 1.35s;
+  --steam-speed: 3s;
+  --spark-speed: 1.8s;
+  --conveyor-speed: 0.9s;
+  --crate-speed: 10s;
+  --pipe-speed: 3.4s;
+  --trolley-speed: 9s;
+  --glow-speed: 2.4s;
   position: relative;
   width: 100%;
   height: 100dvh;
@@ -43,6 +54,77 @@ body {
     background:
       linear-gradient(90deg, rgba(8, 10, 10, 0.94) 0, rgba(8, 10, 10, 0.73) 29%, transparent 61%),
       linear-gradient(0deg, rgba(8, 10, 10, 0.64), transparent 42%);
+  }
+
+  &.ignition {
+    --gear-xl-speed: 18s;
+    --gear-mid-speed: 13s;
+    --gear-small-speed: 7s;
+    --piston-speed: 2.4s;
+    --steam-speed: 5s;
+    --spark-speed: 4s;
+    --conveyor-speed: 1.7s;
+    --crate-speed: 16s;
+    --pipe-speed: 5s;
+    --trolley-speed: 13s;
+    --glow-speed: 4s;
+
+    .gear-xl { opacity: 0.28; }
+    .gear-mid { opacity: 0.5; }
+    .piston:nth-child(n + 2) { opacity: 0.18; }
+    .steam-stack { opacity: 0.24; }
+    .spark-field { opacity: 0; }
+  }
+
+  &.warmup {
+    .gear-xl { opacity: 0.75; }
+    .gear-mid { opacity: 0.85; }
+    .spark-field { opacity: 0.55; }
+  }
+
+  &.full-load {
+    --gear-xl-speed: 4.6s;
+    --gear-mid-speed: 2.9s;
+    --gear-small-speed: 1.9s;
+    --piston-speed: 0.72s;
+    --steam-speed: 1.7s;
+    --spark-speed: 0.8s;
+    --conveyor-speed: 0.42s;
+    --crate-speed: 6s;
+    --pipe-speed: 1.8s;
+    --trolley-speed: 5.5s;
+    --glow-speed: 1.1s;
+
+    .machine-cluster { animation: machine-rumble 150ms linear infinite; }
+    .gear { filter: drop-shadow(0 0 1.25rem rgba(245, 181, 27, 0.2)) drop-shadow(0 1.5rem 1.2rem rgba(0, 0, 0, 0.6)); }
+    .scene-glow { opacity: 1; }
+    .pipe-run { filter: brightness(1.35); }
+  }
+
+  &.online {
+    --state: #{$acid};
+    --gear-xl-speed: 9s;
+    --gear-mid-speed: 6s;
+    --gear-small-speed: 4s;
+    --piston-speed: 1.8s;
+    --steam-speed: 5s;
+    --spark-speed: 8s;
+    --conveyor-speed: 0.7s;
+    --crate-speed: 8s;
+
+    .scene-glow { background: rgba(200, 255, 90, 0.13); opacity: 1; }
+    .machine-cluster { filter: drop-shadow(0 0 1.8rem rgba(200, 255, 90, 0.12)); }
+    .gear { border-color: #7d8b77; }
+    .spark-field { opacity: 0; }
+    .steam-stack { opacity: 0.16; }
+  }
+
+  &.locked {
+    --state: #{$hot};
+
+    .machine-cluster { opacity: 0.42; filter: grayscale(0.55); }
+    .spark-field,
+    .steam-stack { opacity: 0; }
   }
 
   &.ready { --state: #{$acid}; }
@@ -81,7 +163,7 @@ body {
   border-radius: 50%;
   background: rgba(245, 181, 27, 0.07);
   filter: blur(5rem);
-  animation: engine-glow 2.4s ease-in-out infinite;
+  animation: engine-glow var(--glow-speed) ease-in-out infinite;
 }
 
 .factory-machinery {
@@ -110,7 +192,7 @@ body {
   height: 1.65rem;
   border: 2px solid #5c6561;
   background: #171c1a;
-  animation: trolley-run 9s ease-in-out infinite;
+  animation: trolley-run var(--trolley-speed) ease-in-out infinite;
 
   &::before,
   &::after {
@@ -173,7 +255,7 @@ body {
     border-radius: 999px;
     background: var(--state);
     box-shadow: 0 0 1rem var(--state);
-    animation: pipe-flow 3.4s linear infinite;
+    animation: pipe-flow var(--pipe-speed) linear infinite;
   }
 }
 
@@ -211,6 +293,7 @@ body {
   width: 65vw;
   height: 67vh;
   min-height: 25rem;
+  transition: opacity 700ms ease, filter 700ms ease;
 }
 
 .gear {
@@ -219,6 +302,7 @@ body {
   border-radius: 50%;
   background: radial-gradient(circle, #a4aca7 0 8%, #252b29 9% 23%, transparent 24% 41%, #38403d 42% 54%, transparent 55%);
   filter: drop-shadow(0 1.5rem 1.2rem rgba(0, 0, 0, 0.6));
+  transition: opacity 700ms ease, border-color 700ms ease, filter 700ms ease;
 
   &::before,
   &::after {
@@ -239,7 +323,7 @@ body {
   bottom: 0;
   width: clamp(17rem, 31vw, 34rem);
   aspect-ratio: 1;
-  animation: spin 8s linear infinite;
+  animation: spin var(--gear-xl-speed) linear infinite;
 }
 
 .gear-mid {
@@ -248,7 +332,7 @@ body {
   width: clamp(11rem, 19vw, 21rem);
   aspect-ratio: 1;
   border-color: #555f5a;
-  animation: spin 5s linear infinite reverse;
+  animation: spin var(--gear-mid-speed) linear infinite reverse;
 }
 
 .gear-small {
@@ -257,7 +341,7 @@ body {
   width: clamp(6rem, 11vw, 12rem);
   aspect-ratio: 1;
   border-color: #444d49;
-  animation: spin 3.5s linear infinite reverse;
+  animation: spin var(--gear-small-speed) linear infinite reverse;
 }
 
 .boiler {
@@ -325,6 +409,7 @@ body {
   position: relative;
   width: 22%;
   height: 100%;
+  transition: opacity 700ms ease;
 
   i {
     position: absolute;
@@ -335,7 +420,7 @@ body {
     background: linear-gradient(90deg, #555e5a, #d3d8d4 45%, #4d5552);
     transform: translateX(-50%);
     transform-origin: top;
-    animation: piston-rod 1.35s ease-in-out infinite;
+    animation: piston-rod var(--piston-speed) ease-in-out infinite;
   }
 
   span {
@@ -349,7 +434,7 @@ body {
       linear-gradient(90deg, transparent 44%, rgba(245, 181, 27, 0.28) 45% 55%, transparent 56%),
       linear-gradient(#343b38, #141817);
     box-shadow: inset 0 0.35rem rgba(255, 255, 255, 0.04), 0 0.8rem 1rem rgba(0, 0, 0, 0.55);
-    animation: piston-head 1.35s ease-in-out infinite;
+    animation: piston-head var(--piston-speed) ease-in-out infinite;
   }
 
   &:nth-child(2) i,
@@ -365,6 +450,7 @@ body {
   z-index: 5;
   top: 4%;
   left: 9%;
+  transition: opacity 700ms ease;
 
   i {
     position: absolute;
@@ -373,7 +459,7 @@ body {
     border: 3px solid rgba(255, 255, 255, 0.22);
     border-radius: 50%;
     filter: blur(2px);
-    animation: steam 3s ease-out infinite;
+    animation: steam var(--steam-speed) ease-out infinite;
   }
 
   i:nth-child(2) { animation-delay: 0.9s; }
@@ -385,6 +471,7 @@ body {
   z-index: 5;
   top: 38%;
   right: 41%;
+  transition: opacity 500ms ease;
 
   i {
     position: absolute;
@@ -393,7 +480,7 @@ body {
     background: $amber;
     box-shadow: 0 0 0.7rem $hot;
     transform-origin: top;
-    animation: spark 1.8s ease-out infinite;
+    animation: spark var(--spark-speed) ease-out infinite;
   }
 
   i:nth-child(2) { animation-delay: 0.35s; transform: rotate(43deg); }
@@ -433,7 +520,7 @@ body {
   inset: 0;
   background: repeating-linear-gradient(90deg, transparent 0 3rem, rgba(255, 255, 255, 0.16) 3rem 3.2rem);
   background-size: 6.4rem 100%;
-  animation: conveyor 0.9s linear infinite;
+  animation: conveyor var(--conveyor-speed) linear infinite;
 }
 
 .crate {
@@ -449,7 +536,7 @@ body {
   font-size: clamp(0.8rem, 1.4vw, 1.2rem);
   font-weight: 700;
   box-shadow: inset 0 0 0 0.4rem rgba(0, 0, 0, 0.12), 0 0.5rem 0.7rem rgba(0, 0, 0, 0.5);
-  animation: crate-move 10s linear infinite;
+  animation: crate-move var(--crate-speed) linear infinite;
 }
 
 .crate-two { animation-delay: -2.5s; }
@@ -547,6 +634,124 @@ body {
   animation: reveal-up 700ms 240ms ease both;
 
   strong { color: rgba(255, 255, 255, 0.9); font-weight: 500; }
+}
+
+.landing-hero {
+  position: absolute;
+  z-index: 10;
+  top: 18%;
+  left: clamp(1rem, 4vw, 4rem);
+  width: min(44rem, 46vw);
+}
+
+.landing-title {
+  margin: 0;
+  color: #f1eee6;
+  font-size: clamp(3.8rem, 7.6vw, 7.6rem);
+  font-weight: 700;
+  line-height: 0.84;
+  letter-spacing: -0.07em;
+  animation: reveal-up 750ms 170ms cubic-bezier(0.16, 1, 0.3, 1) both;
+
+  span {
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(245, 181, 27, 0.82);
+  }
+}
+
+.landing-copy {
+  margin: 1.6rem 0 0;
+  color: rgba(255, 255, 255, 0.52);
+  font-size: clamp(0.9rem, 1.2vw, 1.05rem);
+  line-height: 1.75;
+  animation: reveal-up 700ms 240ms ease both;
+}
+
+.usage-deck {
+  position: absolute;
+  z-index: 12;
+  top: 18%;
+  right: clamp(1rem, 4vw, 4rem);
+  width: min(35rem, 43vw);
+  padding: clamp(1rem, 2vw, 1.5rem);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-top: 2px solid $amber;
+  background: rgba(9, 12, 11, 0.82);
+  box-shadow: 0 1.8rem 5rem rgba(0, 0, 0, 0.42);
+  backdrop-filter: blur(14px);
+  animation: reveal-up 800ms 310ms ease both;
+}
+
+.usage-head {
+  padding-bottom: 0.9rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+
+  span {
+    color: $amber;
+    font-size: 0.55rem;
+    font-weight: 600;
+    letter-spacing: 0.17em;
+    text-transform: uppercase;
+  }
+
+  h2 { margin: 0.25rem 0 0; font-size: clamp(1.35rem, 2vw, 1.8rem); font-weight: 600; }
+}
+
+.usage-steps {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  li {
+    display: grid;
+    grid-template-columns: 2.6rem 1fr;
+    gap: 0.85rem;
+    padding-block: 0.9rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+
+    > span {
+      display: grid;
+      width: 2.35rem;
+      height: 2.35rem;
+      place-items: center;
+      border: 1px solid rgba(245, 181, 27, 0.5);
+      color: $amber;
+      font-size: 0.68rem;
+      font-weight: 600;
+    }
+
+    strong { font-size: 0.9rem; font-weight: 600; }
+    p { margin: 0.25rem 0 0; color: rgba(255, 255, 255, 0.4); font-size: 0.75rem; line-height: 1.5; }
+    code { color: rgba(255, 255, 255, 0.72); font-family: inherit; }
+  }
+}
+
+.usage-example {
+  margin-top: 1rem;
+  padding: 0.8rem 0.9rem;
+  border: 1px solid rgba(245, 181, 27, 0.3);
+  background: rgba(245, 181, 27, 0.06);
+
+  span {
+    display: block;
+    color: rgba(255, 255, 255, 0.3);
+    font-size: 0.5rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+
+  code {
+    display: block;
+    overflow: hidden;
+    margin-top: 0.35rem;
+    color: $amber;
+    font-family: inherit;
+    font-size: clamp(0.72rem, 1.2vw, 0.88rem);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
 }
 
 .status-deck {
@@ -670,6 +875,11 @@ body {
 @keyframes lamp { 50% { opacity: 0.28; } }
 @keyframes grid-drift { to { background-position: 4rem 4rem; } }
 @keyframes engine-glow { 50% { opacity: 0.45; transform: scale(1.12); } }
+@keyframes machine-rumble {
+  0%, 100% { transform: translate(0, 0); }
+  25% { transform: translate(1px, -1px); }
+  75% { transform: translate(-1px, 1px); }
+}
 @keyframes trolley-run { 0%, 100% { left: 3%; } 50% { left: 83%; } }
 @keyframes chain-pump { 50% { transform: translateX(-50%) scaleY(0.72); } }
 @keyframes hook-pump { 50% { top: calc(100% + 13vh); } }
@@ -714,6 +924,39 @@ body {
   .factory-title { font-size: clamp(4rem, 20vw, 6rem); }
   .factory-copy { margin-top: 1.2rem; font-size: 0.86rem; }
 
+  .landing-hero {
+    top: 11%;
+    left: 0.9rem;
+    width: calc(100% - 1.8rem);
+  }
+
+  .landing-title { font-size: clamp(3.5rem, 16vw, 5rem); }
+  .landing-copy { margin-top: 0.9rem; font-size: 0.78rem; line-height: 1.55; }
+
+  .usage-deck {
+    top: auto;
+    right: 0.85rem;
+    bottom: 6.5rem;
+    left: 0.85rem;
+    width: auto;
+    padding: 0.8rem;
+  }
+
+  .usage-head { padding-bottom: 0.55rem; }
+  .usage-head h2 { font-size: 1.15rem; }
+
+  .usage-steps li {
+    grid-template-columns: 2.1rem 1fr;
+    gap: 0.65rem;
+    padding-block: 0.55rem;
+
+    > span { width: 1.9rem; height: 1.9rem; font-size: 0.6rem; }
+    strong { font-size: 0.78rem; }
+    p { margin-top: 0.12rem; font-size: 0.66rem; line-height: 1.35; }
+  }
+
+  .usage-example { margin-top: 0.65rem; padding: 0.6rem 0.7rem; }
+
   .ceiling-rail { top: 10%; left: 58%; }
   .pipe-one { right: -3rem; }
   .pipe-two { display: none; }
@@ -755,6 +998,10 @@ body {
   .factory-copy { display: none; }
   .status-deck { bottom: 6.8rem; }
   .machine-cluster { bottom: 19vh; }
+  .landing-hero { top: 13%; }
+  .landing-copy { display: none; }
+  .usage-deck { bottom: 5.9rem; }
+  .usage-steps li { padding-block: 0.42rem; }
 }
 
 @media (prefers-reduced-motion: reduce) {
