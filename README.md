@@ -24,6 +24,14 @@ https://your-gateway.example/my-render-service/dashboard
 
 This targets `https://my-render-service.onrender.com/dashboard`.
 
+Append a theme name as a bare query parameter to choose its animation:
+
+```text
+https://your-gateway.example/my-render-service?coffee
+```
+
+Available themes: `factory`, `bakery`, `space`, `garden`, `coffee`, and `arcade`.
+
 ## Development
 
 Requirements: [Node.js](https://nodejs.org/) and [pnpm](https://pnpm.io/).

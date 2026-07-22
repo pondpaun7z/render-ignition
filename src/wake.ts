@@ -24,6 +24,14 @@ export function renderTargetFromPath(pathname: string): string | null {
   }
 }
 
+export function themeFromSearch<T extends string>(search: string, themes: readonly T[]): T | null {
+  const params = new URLSearchParams(search)
+  const namedTheme = params.get('theme')
+
+  if (namedTheme && themes.includes(namedTheme as T)) return namedTheme as T
+  return themes.find(theme => params.has(theme)) ?? null
+}
+
 export function progressFor(attempts: number, elapsedSeconds: number): number {
   return Math.min(94, Math.round(12 + Math.log2(attempts + 1) * 17 + elapsedSeconds * 0.35))
 }

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
-import { machineStageFor, progressFor, renderTargetFromPath } from './wake'
+import { machineStageFor, progressFor, renderTargetFromPath, themeFromSearch } from './wake'
 
 type Phase = 'checking' | 'waking' | 'ready' | 'invalid'
 
@@ -106,12 +106,14 @@ function isTheme(value: string | null): value is Theme {
 const phase = ref<Phase>('checking')
 const attempts = ref(0)
 const elapsedSeconds = ref(0)
+const themeNames = Object.keys(THEMES) as Theme[]
 const savedTheme = localStorage.getItem('wake-theme')
-const theme = ref<Theme>(isTheme(savedTheme) ? savedTheme : 'factory')
-const themeOptions = Object.entries(THEMES).map(([value, copy]) => ({ value: value as Theme, label: copy.label }))
+const queryTheme = themeFromSearch(window.location.search, themeNames)
+const theme = ref<Theme>(queryTheme ?? (isTheme(savedTheme) ? savedTheme : 'factory'))
+const themeOptions = themeNames.map(value => ({ value, label: THEMES[value].label }))
 const isLanding = window.location.pathname === '/'
 const targetUrl = renderTargetFromPath(window.location.pathname)
-const exampleUrl = `${window.location.origin}/your-render-name`
+const exampleUrl = computed(() => `${window.location.origin}/your-render-name?${theme.value}`)
 
 let active = true
 let retryTimer: number | undefined
@@ -135,6 +137,10 @@ function setTheme(nextTheme: string): void {
   if (!isTheme(nextTheme)) return
   theme.value = nextTheme
   localStorage.setItem('wake-theme', nextTheme)
+
+  const url = new URL(window.location.href)
+  url.search = nextTheme
+  window.history.replaceState(null, '', url.toString())
 }
 
 function selectTheme(event: Event): void {
@@ -368,10 +374,14 @@ onBeforeUnmount(() => {
           </li>
           <li>
             <span>02</span>
-            <div><strong>Append it to this URL</strong><p>Replace <code>your-render-name</code> with the service name</p></div>
+            <div><strong>Build your gateway URL</strong><p>Replace <code>your-render-name</code> with the service name</p></div>
           </li>
           <li>
             <span>03</span>
+            <div><strong>Pick an animation theme</strong><p>Add <code>?coffee</code>, <code>?space</code>, or use the Theme menu above</p></div>
+          </li>
+          <li>
+            <span>04</span>
             <div><strong>Open the URL and wait</strong><p>The gateway wakes Render and redirects you automatically</p></div>
           </li>
         </ol>
