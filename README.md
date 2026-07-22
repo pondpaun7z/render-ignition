@@ -30,7 +30,7 @@ Append a theme name as a bare query parameter to choose its animation:
 https://your-gateway.example/my-render-service?coffee
 ```
 
-Available themes: `factory`, `bakery`, `space`, `garden`, `coffee`, and `arcade`.
+Available themes: `factory`, `bakery`, `space`, `garden`, `coffee`, `arcade`, `halloween`, and `christmas`.
 
 ## Development
 

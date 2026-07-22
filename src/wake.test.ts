@@ -15,11 +15,13 @@ test('wake progress moves forward without claiming completion', () => {
 })
 
 test('reads animation theme from short or named query params', () => {
-  const themes = ['factory', 'coffee', 'arcade', 'garden'] as const
+  const themes = ['factory', 'coffee', 'arcade', 'garden', 'halloween', 'christmas'] as const
 
   assert.equal(themeFromSearch('?coffee', themes), 'coffee')
   assert.equal(themeFromSearch('?theme=arcade', themes), 'arcade')
   assert.equal(themeFromSearch('?utm=test&garden', themes), 'garden')
+  assert.equal(themeFromSearch('?halloween', themes), 'halloween')
+  assert.equal(themeFromSearch('?theme=christmas', themes), 'christmas')
   assert.equal(themeFromSearch('?theme=unknown', themes), null)
 })
 

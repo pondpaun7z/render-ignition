@@ -95,6 +95,36 @@ const THEMES = {
     stages: { showcase: 'Attract mode', ignition: 'Booting', warmup: 'Loading', 'full-load': 'Turbo', online: 'Ready!', locked: 'Game over' },
     status: { ready: 'Player one is ready', waiting: 'Final level — checking again', starting: 'Loading the Render stage', initial: 'Inserting wake-up coin' },
   },
+  halloween: {
+    label: 'Halloween',
+    code: 'H-07',
+    name: 'Render haunted gateway',
+    landingEyebrow: 'Witching hour',
+    landingTitle: ['Summon Render', 'From The Crypt'],
+    wakeEyebrow: 'Crypt 07',
+    wakeMode: 'Automated summoning ritual',
+    wakeTitle: ['Raising', 'Your App'],
+    manual: 'Spell book / 01',
+    operation: 'HX-07 / Ritual status',
+    safety: ['Summoning in progress', 'Keep this window open', 'Beware of cold starts'],
+    stages: { showcase: 'Haunting loop', ignition: 'Candlelit', warmup: 'Brewing', 'full-load': 'Summoning', online: 'Alive!', locked: 'Entombed' },
+    status: { ready: 'Your Render lives', waiting: 'The spirits are close — checking again', starting: 'Stirring the Render cauldron', initial: 'Lighting the summoning candles' },
+  },
+  christmas: {
+    label: 'Christmas',
+    code: 'X-08',
+    name: 'Render holiday workshop',
+    landingEyebrow: 'Season greetings',
+    landingTitle: ['Unwrap Render', 'Before You Visit'],
+    wakeEyebrow: 'Workshop 08',
+    wakeMode: 'Automated gift assembly',
+    wakeTitle: ['Wrapping', 'Your App'],
+    manual: 'Nice list / 01',
+    operation: 'NP-08 / Workshop status',
+    safety: ['Elves at work', 'Keep this window open', 'Holiday magic loading'],
+    stages: { showcase: 'Snow globe', ignition: 'Lights on', warmup: 'Building', 'full-load': 'Wrapping', online: 'Delivered', locked: 'Snowed in' },
+    status: { ready: 'Your Render is delivered', waiting: 'Almost wrapped — checking again', starting: 'The workshop is building your app', initial: 'Switching on the holiday lights' },
+  },
 } as const
 
 type Theme = keyof typeof THEMES
@@ -316,7 +346,7 @@ onBeforeUnmount(() => {
       <div class="bean-stream"><i /><i /><i /><i /><i /></div>
     </div>
 
-    <div v-else class="arcade-machinery" aria-hidden="true">
+    <div v-else-if="theme === 'arcade'" class="arcade-machinery" aria-hidden="true">
       <div class="pixel-field"><i /><i /><i /><i /><i /><i /></div>
       <div class="arcade-cabinet">
         <div class="arcade-marquee">RENDER<br><span>WAKE</span></div>
@@ -333,6 +363,39 @@ onBeforeUnmount(() => {
       <div class="score-burst"><i>+100</i><i>1UP</i><i>COMBO</i></div>
       <div class="pixel-runner"><i /><i /><i /><i /></div>
       <div class="arcade-floor" />
+    </div>
+
+    <div v-else-if="theme === 'halloween'" class="halloween-machinery" aria-hidden="true">
+      <div class="halloween-moon"><i /></div>
+      <div class="halloween-bats"><i /><i /><i /><i /></div>
+      <div class="haunted-house">
+        <i class="house-chimney" />
+        <div class="house-roof" />
+        <div class="house-windows"><i /><i /><i /></div>
+        <div class="house-door"><i /></div>
+      </div>
+      <div class="halloween-ghost"><i /><i /></div>
+      <div class="jack-o-lantern"><span /><i /><i /><b /></div>
+      <div class="graveyard"><i /><i /><i /><i /></div>
+      <div class="halloween-fog"><i /><i /><i /></div>
+    </div>
+
+    <div v-else class="christmas-machinery" aria-hidden="true">
+      <div class="christmas-lights"><i /><i /><i /><i /><i /><i /></div>
+      <div class="christmas-snow"><i /><i /><i /><i /><i /><i /><i /><i /><i /><i /></div>
+      <div class="santa-sleigh"><span /><i /><i /></div>
+      <div class="christmas-tree">
+        <b>★</b>
+        <span /><span /><span />
+        <div class="tree-ornaments"><i /><i /><i /><i /><i /><i /></div>
+      </div>
+      <div class="gift-line">
+        <span class="gift gift-one"><i /></span>
+        <span class="gift gift-two"><i /></span>
+        <span class="gift gift-three"><i /></span>
+        <span class="gift gift-four"><i /></span>
+      </div>
+      <div class="snow-bank" />
     </div>
 
     <header class="factory-header">
