@@ -1,0 +1,187 @@
+$acid: #b8ff3d;
+$ink: #0b0d0c;
+
+:root {
+  font-family: "Chakra Petch", sans-serif;
+  color: #f5f5f0;
+  background: $ink;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+}
+
+* { box-sizing: border-box; }
+
+html { background: $ink; }
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100dvh;
+  background:
+    radial-gradient(circle at 76% 42%, rgba(184, 255, 61, 0.09), transparent 27rem),
+    linear-gradient(115deg, transparent 49.8%, rgba(255, 255, 255, 0.035) 50%, transparent 50.2%),
+    $ink;
+}
+
+button, input { font: inherit; }
+
+.noise {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.2;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.18'/%3E%3C/svg%3E");
+  mix-blend-mode: soft-light;
+}
+
+.status-dot {
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 999px;
+  background: $acid;
+  box-shadow: 0 0 0 0 rgba(184, 255, 61, 0.5);
+  animation: ping 1.8s ease-out infinite;
+}
+
+.outline-text {
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(245, 245, 240, 0.52);
+}
+
+.wake-panel {
+  position: relative;
+  width: min(100%, 29rem);
+  justify-self: center;
+  padding: clamp(1.6rem, 5vw, 2.5rem);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(14, 17, 15, 0.72);
+  box-shadow: 0 2rem 6rem rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(18px);
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0.55rem;
+    border: 1px solid rgba(255, 255, 255, 0.035);
+    pointer-events: none;
+  }
+
+  &.ready {
+    border-color: rgba(184, 255, 61, 0.45);
+
+    .core-disc {
+      color: $ink;
+      background: $acid;
+      box-shadow: 0 0 4rem rgba(184, 255, 61, 0.35);
+    }
+  }
+}
+
+.panel-corner {
+  position: absolute;
+  width: 1.1rem;
+  height: 1.1rem;
+  border-color: $acid;
+}
+
+.corner-tl {
+  top: -1px;
+  left: -1px;
+  border-top: 2px solid;
+  border-left: 2px solid;
+}
+
+.corner-br {
+  right: -1px;
+  bottom: -1px;
+  border-right: 2px solid;
+  border-bottom: 2px solid;
+}
+
+.wake-core {
+  position: relative;
+  display: grid;
+  width: 10.5rem;
+  aspect-ratio: 1;
+  margin-inline: auto;
+  place-items: center;
+}
+
+.orbit {
+  position: absolute;
+  inset: 0;
+  border: 1px solid rgba(184, 255, 61, 0.2);
+  border-radius: 999px;
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: -0.22rem;
+    left: 50%;
+    width: 0.42rem;
+    height: 0.42rem;
+    border-radius: 999px;
+    background: $acid;
+    box-shadow: 0 0 1rem $acid;
+  }
+}
+
+.orbit-one { animation: spin 3.8s linear infinite; }
+
+.orbit-two {
+  inset: 0.72rem;
+  border-style: dashed;
+  animation: spin 7s linear infinite reverse;
+}
+
+.core-disc {
+  display: grid;
+  width: 5.4rem;
+  aspect-ratio: 1;
+  place-items: center;
+  border: 1px solid rgba(184, 255, 61, 0.5);
+  border-radius: 999px;
+  color: $acid;
+  background: rgba(184, 255, 61, 0.05);
+  transition: 300ms ease;
+
+  svg { width: 2.2rem; }
+}
+
+.progress-track {
+  height: 0.35rem;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.progress-fill {
+  position: relative;
+  height: 100%;
+  background: $acid;
+  box-shadow: 0 0 1.2rem rgba(184, 255, 61, 0.65);
+  transition: width 700ms cubic-bezier(0.22, 1, 0.36, 1);
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent);
+    animation: scan 1.6s linear infinite;
+  }
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes scan { from { transform: translateX(-100%); } to { transform: translateX(100%); } }
+@keyframes ping { 70% { box-shadow: 0 0 0 0.55rem rgba(184, 255, 61, 0); } }
+
+@media (max-width: 1023px) {
+  .wake-panel { justify-self: start; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
