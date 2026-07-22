@@ -2,10 +2,10 @@ import assert from 'node:assert/strict'
 import test from 'node:test'
 import { machineStageFor, progressFor, renderTargetFromPath } from './wake.ts'
 
-test('builds a safe Render hostname from one path segment', () => {
+test('builds a safe Render URL and preserves its subpath', () => {
   assert.equal(renderTargetFromPath('/rails-starter-kit'), 'https://rails-starter-kit.onrender.com/')
   assert.equal(renderTargetFromPath('/My-App/'), 'https://my-app.onrender.com/')
-  assert.equal(renderTargetFromPath('/two/parts'), null)
+  assert.equal(renderTargetFromPath('/rails-starter-kit/admin/users'), 'https://rails-starter-kit.onrender.com/admin/users')
   assert.equal(renderTargetFromPath('/-invalid'), null)
 })
 

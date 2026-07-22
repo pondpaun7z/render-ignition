@@ -13,11 +13,12 @@ export function machineStageFor(progress: number, isLanding = false, isInvalid =
 
 export function renderTargetFromPath(pathname: string): string | null {
   const parts = pathname.split('/').filter(Boolean)
-  if (parts.length !== 1) return null
+  if (parts.length === 0) return null
 
   try {
-    const name = decodeURIComponent(parts[0]).toLowerCase()
-    return RENDER_NAME.test(name) ? `https://${name}.onrender.com/` : null
+    const [rawName, ...subpath] = parts
+    const name = decodeURIComponent(rawName).toLowerCase()
+    return RENDER_NAME.test(name) ? `https://${name}.onrender.com/${subpath.join('/')}` : null
   } catch {
     return null
   }

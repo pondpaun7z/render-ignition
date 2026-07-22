@@ -16,7 +16,13 @@ This targets:
 https://my-render-service.onrender.com/
 ```
 
-Only a single valid Render service name is accepted. Invalid or nested paths are rejected.
+You can include a subpath after the service name:
+
+```text
+https://your-gateway.example/my-render-service/dashboard
+```
+
+This targets `https://my-render-service.onrender.com/dashboard`.
 
 ## Development
 
@@ -54,7 +60,7 @@ pnpm deploy
 
 ## How it works
 
-The route `/:name` validates the path, constructs `https://<name>.onrender.com/`, sends a browser request, and redirects to the service when that request completes. Because the request uses `no-cors`, the page cannot inspect the service's HTTP status or response body.
+The route `/:name/:subpath` validates the service name, constructs `https://<name>.onrender.com/<subpath>`, sends a browser request, and redirects to the service when that request completes. The subpath is optional. Because the request uses `no-cors`, the page cannot inspect the service's HTTP status or response body.
 
 ## Tech stack
 
