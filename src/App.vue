@@ -65,103 +65,93 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <main class="factory-shell">
+  <main class="factory-scene" :class="{ ready: phase === 'ready', invalid: phase === 'invalid' }">
     <div class="noise" aria-hidden="true" />
     <div class="factory-grid" aria-hidden="true" />
+    <div class="scene-glow" aria-hidden="true" />
+
+    <div class="factory-machinery" aria-hidden="true">
+      <div class="ceiling-rail">
+        <div class="trolley"><i /><span /></div>
+      </div>
+
+      <div class="pipe-run pipe-one"><i /></div>
+      <div class="pipe-run pipe-two"><i /></div>
+
+      <div class="machine-cluster">
+        <div class="steam-stack"><i /><i /><i /></div>
+
+        <div class="boiler">
+          <div class="boiler-gauge"><i /></div>
+          <span>04</span>
+        </div>
+
+        <div class="piston-bank">
+          <div class="piston"><i /><span /></div>
+          <div class="piston"><i /><span /></div>
+          <div class="piston"><i /><span /></div>
+          <div class="piston"><i /><span /></div>
+        </div>
+
+        <div class="gear gear-xl" />
+        <div class="gear gear-mid" />
+        <div class="gear gear-small" />
+        <div class="spark-field"><i /><i /><i /><i /></div>
+      </div>
+
+      <div class="factory-floor" />
+
+      <div class="conveyor">
+        <div class="conveyor-belt" />
+        <span class="crate crate-one">R</span>
+        <span class="crate crate-two">R</span>
+        <span class="crate crate-three">R</span>
+        <span class="crate crate-four">R</span>
+      </div>
+    </div>
 
     <header class="factory-header">
       <div class="plant-mark">
         <span class="plant-number">R-01</span>
-        <span>Cold start facility</span>
+        <span>Render wake factory</span>
       </div>
       <div class="plant-status">
-        <span>Cloudflare edge</span>
         <span class="status-live"><i class="status-dot" aria-hidden="true" /> Link active</span>
       </div>
     </header>
 
-    <section class="factory-layout">
-      <div class="factory-brief">
-        <p class="eyebrow"><span>Plant 04</span> Render wake sequence</p>
-        <h1>
-          เดินเครื่อง<br><span class="outline-text">แล้วไปต่อ</span>
-        </h1>
-        <p class="factory-copy">
-          กำลังอุ่นเครื่อง <strong>{{ targetHost }}</strong> ให้พร้อมทำงาน
-          เมื่อแรงดันระบบถึงระดับที่กำหนด เราจะส่งคุณไปต่ออัตโนมัติ
-        </p>
+    <section class="factory-hero">
+      <p class="eyebrow"><span>Plant 04</span> Automated cold start</p>
+      <h1 class="factory-title">กำลัง<br><span>เดินเครื่อง</span></h1>
+      <p class="factory-copy">
+        กำลังอุ่นเครื่อง <strong>{{ targetHost }}</strong><br>
+        เมื่อระบบพร้อม เราจะส่งคุณไปต่ออัตโนมัติ
+      </p>
+    </section>
 
-        <div class="process-line" aria-label="ลำดับการเริ่มระบบ">
-          <div class="process-step active"><span>01</span> Signal</div>
-          <div class="process-step"><span>02</span> Warm up</div>
-          <div class="process-step"><span>03</span> Transfer</div>
+    <aside class="status-deck" aria-live="polite">
+      <div class="deck-head">
+        <div>
+          <span>MX-04 / Current operation</span>
+          <h2>{{ statusText }}</h2>
         </div>
+        <span class="cycle-state"><i aria-hidden="true" />{{ phase === 'ready' ? 'Online' : phase === 'invalid' ? 'Locked' : 'Running' }}</span>
       </div>
 
-      <article class="machine-console" :class="{ ready: phase === 'ready', invalid: phase === 'invalid' }">
-        <div class="panel-corner corner-tl" />
-        <div class="panel-corner corner-br" />
-
-        <div class="console-head">
-          <div>
-            <span class="console-kicker">Wake engine</span>
-            <strong>MX-04 / Auto cycle</strong>
-          </div>
-          <span class="cycle-state"><i aria-hidden="true" />{{ phase === 'ready' ? 'Online' : phase === 'invalid' ? 'Locked' : 'Running' }}</span>
+      <div class="progress-row">
+        <div class="progress-track" role="progressbar" :aria-valuenow="progress" aria-valuemin="0" aria-valuemax="100">
+          <div class="progress-fill" :style="{ width: `${progress}%` }" />
         </div>
+        <span class="progress-number">{{ progress }}<small>%</small></span>
+      </div>
 
-        <div class="machine-window" aria-hidden="true">
-          <div class="warning-bar" />
-
-          <div class="steam-stack">
-            <i /><i /><i />
-          </div>
-
-          <div class="piston-bank">
-            <div class="piston"><i /><span /></div>
-            <div class="piston"><i /><span /></div>
-            <div class="piston"><i /><span /></div>
-          </div>
-
-          <div class="gear-field">
-            <div class="gear gear-main" />
-            <div class="gear gear-small" />
-            <div class="spark-field"><i /><i /><i /></div>
-          </div>
-
-          <div class="conveyor">
-            <div class="conveyor-belt" />
-            <span class="crate crate-one">R</span>
-            <span class="crate crate-two">R</span>
-            <span class="crate crate-three">R</span>
-          </div>
-        </div>
-
-        <div class="console-readout" aria-live="polite">
-          <div class="readout-row">
-            <div>
-              <p>Current operation</p>
-              <h2>{{ statusText }}</h2>
-            </div>
-            <span class="progress-number">{{ progress }}<small>%</small></span>
-          </div>
-
-          <div class="progress-track" role="progressbar" :aria-valuenow="progress" aria-valuemin="0" aria-valuemax="100">
-            <div class="progress-fill" :style="{ width: `${progress}%` }" />
-          </div>
-
-          <div class="telemetry">
-            <div><span>Probe</span><strong>{{ String(attempts).padStart(2, '0') }}</strong></div>
-            <div><span>Cycle time</span><strong>{{ String(Math.floor(elapsedSeconds / 60)).padStart(2, '0') }}:{{ String(elapsedSeconds % 60).padStart(2, '0') }}</strong></div>
-            <div><span>Mode</span><strong>Auto</strong></div>
-          </div>
-        </div>
-
-        <p class="console-note">
-          {{ phase === 'invalid' ? 'ใช้ URL รูปแบบ /ชื่อ เช่น /rails-starter-kit' : 'Render Free ปกติใช้เวลาตื่นประมาณ 1 นาที กรุณาเปิดหน้านี้ไว้' }}
-        </p>
-      </article>
-    </section>
+      <div class="telemetry">
+        <div><span>Probe</span><strong>{{ String(attempts).padStart(2, '0') }}</strong></div>
+        <div><span>Cycle time</span><strong>{{ String(Math.floor(elapsedSeconds / 60)).padStart(2, '0') }}:{{ String(elapsedSeconds % 60).padStart(2, '0') }}</strong></div>
+        <div><span>Mode</span><strong>Auto</strong></div>
+        <p>{{ phase === 'invalid' ? 'ใช้ URL รูปแบบ /ชื่อ เช่น /rails-starter-kit' : 'กรุณาเปิดหน้านี้ไว้ระหว่างเดินเครื่อง' }}</p>
+      </div>
+    </aside>
 
     <div class="safety-rail" aria-hidden="true"><span>Automatic machinery</span><span>Keep this window open</span><span>Automatic machinery</span></div>
   </main>
