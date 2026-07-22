@@ -27,11 +27,11 @@ const machineStageLabel = computed(() => ({
 })[machineStage.value])
 const targetHost = targetUrl ? new URL(targetUrl).host : '[name].onrender.com'
 const statusText = computed(() => {
-  if (phase.value === 'invalid') return 'ชื่อ Render ไม่ถูกต้อง'
-  if (phase.value === 'ready') return 'ระบบพร้อมแล้ว'
-  if (elapsedSeconds.value > 45) return 'ใกล้แล้ว กำลังเช็กอีกครั้ง'
-  if (elapsedSeconds.value > 12) return 'Render กำลังเริ่มระบบ'
-  return 'กำลังส่งสัญญาณปลุก'
+  if (phase.value === 'invalid') return 'Invalid Render service name'
+  if (phase.value === 'ready') return 'Service is ready'
+  if (elapsedSeconds.value > 45) return 'Almost there — checking again'
+  if (elapsedSeconds.value > 12) return 'Render is starting up'
+  return 'Sending wake-up signal'
 })
 
 async function probe(): Promise<void> {
@@ -58,7 +58,7 @@ async function probe(): Promise<void> {
 
 onMounted(() => {
   if (isLanding) {
-    document.title = 'Render Ignition — วิธีใช้งาน'
+    document.title = 'Render Ignition — Quick Start'
     return
   }
 
@@ -67,7 +67,7 @@ onMounted(() => {
     return
   }
 
-  document.title = `กำลังปลุก ${targetHost}`
+  document.title = `Waking ${targetHost}`
   clockTimer = window.setInterval(() => elapsedSeconds.value += 1, 1000)
   void probe()
 })
@@ -139,31 +139,31 @@ onBeforeUnmount(() => {
     <template v-if="isLanding">
       <section class="landing-hero">
         <p class="eyebrow"><span>Quick start</span> Render free instance</p>
-        <h1 class="landing-title">ปลุก Render<br><span>ก่อนเข้าใช้งาน</span></h1>
+        <h1 class="landing-title">Wake Render<br><span>Before You Visit</span></h1>
         <p class="landing-copy">
-          ใช้หน้านี้เป็นประตูไปยัง Render Service ของคุณ<br>
-          ระบบจะปลุกเซิร์ฟเวอร์และพาไปต่อเมื่อพร้อม
+          Use this page as a gateway to your Render service.<br>
+          It wakes the server and redirects you when it is ready.
         </p>
       </section>
 
       <aside class="usage-deck">
         <div class="usage-head">
           <span>Operation manual / 01</span>
-          <h2>วิธีใช้งาน</h2>
+          <h2>How it works</h2>
         </div>
 
         <ol class="usage-steps">
           <li>
             <span>01</span>
-            <div><strong>ดูชื่อ Render Service</strong><p>เช่น <code>my-app</code> จาก my-app.onrender.com</p></div>
+            <div><strong>Find your Render service name</strong><p>For example, <code>my-app</code> from my-app.onrender.com</p></div>
           </li>
           <li>
             <span>02</span>
-            <div><strong>ต่อชื่อท้าย URL นี้</strong><p>เปลี่ยน <code>your-render-name</code> เป็นชื่อ Service</p></div>
+            <div><strong>Append it to this URL</strong><p>Replace <code>your-render-name</code> with the service name</p></div>
           </li>
           <li>
             <span>03</span>
-            <div><strong>เปิด URL แล้วรอ</strong><p>ระบบจะปลุก Render และ redirect ให้อัตโนมัติ</p></div>
+            <div><strong>Open the URL and wait</strong><p>The gateway wakes Render and redirects you automatically</p></div>
           </li>
         </ol>
 
@@ -177,10 +177,10 @@ onBeforeUnmount(() => {
     <template v-else>
       <section class="factory-hero">
         <p class="eyebrow"><span>Plant 04</span> Automated cold start</p>
-        <h1 class="factory-title">กำลัง<br><span>เดินเครื่อง</span></h1>
+        <h1 class="factory-title">Starting<br><span>The Engine</span></h1>
         <p class="factory-copy">
-          กำลังอุ่นเครื่อง <strong>{{ targetHost }}</strong><br>
-          เมื่อระบบพร้อม เราจะส่งคุณไปต่ออัตโนมัติ
+          Warming up <strong>{{ targetHost }}</strong><br>
+          You will be redirected automatically when it is ready.
         </p>
       </section>
 
@@ -204,7 +204,7 @@ onBeforeUnmount(() => {
           <div><span>Probe</span><strong>{{ String(attempts).padStart(2, '0') }}</strong></div>
           <div><span>Cycle time</span><strong>{{ String(Math.floor(elapsedSeconds / 60)).padStart(2, '0') }}:{{ String(elapsedSeconds % 60).padStart(2, '0') }}</strong></div>
           <div><span>Stage</span><strong>{{ machineStageLabel }}</strong></div>
-          <p>{{ phase === 'invalid' ? 'ใช้ URL รูปแบบ /ชื่อ เช่น /rails-starter-kit' : 'กรุณาเปิดหน้านี้ไว้ระหว่างเดินเครื่อง' }}</p>
+          <p>{{ phase === 'invalid' ? 'Use /service-name, for example /rails-starter-kit' : 'Keep this page open while the service starts' }}</p>
         </div>
       </aside>
     </template>
