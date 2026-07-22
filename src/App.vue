@@ -65,67 +65,104 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <main class="min-h-dvh overflow-hidden px-5 py-6 sm:px-8 sm:py-8">
+  <main class="factory-shell">
     <div class="noise" aria-hidden="true" />
+    <div class="factory-grid" aria-hidden="true" />
 
-    <header class="relative z-10 mx-auto flex max-w-6xl items-center justify-between border-b border-white/10 pb-4 text-[0.68rem] font-semibold uppercase tracking-[0.24em] text-white/50">
-      <span>Wake relay / 01</span>
-      <span class="flex items-center gap-2 text-lime-300">
-        <i class="status-dot" aria-hidden="true" />
-        Cloudflare edge
-      </span>
+    <header class="factory-header">
+      <div class="plant-mark">
+        <span class="plant-number">R-01</span>
+        <span>Cold start facility</span>
+      </div>
+      <div class="plant-status">
+        <span>Cloudflare edge</span>
+        <span class="status-live"><i class="status-dot" aria-hidden="true" /> Link active</span>
+      </div>
     </header>
 
-    <section class="relative z-10 mx-auto grid min-h-[calc(100dvh-6.5rem)] max-w-6xl items-center gap-12 py-12 lg:grid-cols-[1.08fr_0.92fr]">
-      <div class="max-w-2xl">
-        <p class="mb-5 text-xs font-semibold uppercase tracking-[0.28em] text-lime-300">Render free instance</p>
-        <h1 class="text-balance text-[clamp(3.25rem,9vw,7.8rem)] font-bold leading-[0.82] tracking-[-0.065em] text-stone-100">
-          ปลุกก่อน<br><span class="outline-text">แล้วค่อยไป</span>
+    <section class="factory-layout">
+      <div class="factory-brief">
+        <p class="eyebrow"><span>Plant 04</span> Render wake sequence</p>
+        <h1>
+          เดินเครื่อง<br><span class="outline-text">แล้วไปต่อ</span>
         </h1>
-        <p class="mt-8 max-w-lg text-base leading-7 text-white/55 sm:text-lg">
-          กำลังเปิด <strong class="font-medium text-white/85">{{ targetHost }}</strong>
-          ให้พร้อมใช้งาน แล้วจะพาคุณไปต่อโดยอัตโนมัติ
+        <p class="factory-copy">
+          กำลังอุ่นเครื่อง <strong>{{ targetHost }}</strong> ให้พร้อมทำงาน
+          เมื่อแรงดันระบบถึงระดับที่กำหนด เราจะส่งคุณไปต่ออัตโนมัติ
         </p>
+
+        <div class="process-line" aria-label="ลำดับการเริ่มระบบ">
+          <div class="process-step active"><span>01</span> Signal</div>
+          <div class="process-step"><span>02</span> Warm up</div>
+          <div class="process-step"><span>03</span> Transfer</div>
+        </div>
       </div>
 
-      <div class="wake-panel" :class="{ ready: phase === 'ready' }">
+      <article class="machine-console" :class="{ ready: phase === 'ready', invalid: phase === 'invalid' }">
         <div class="panel-corner corner-tl" />
         <div class="panel-corner corner-br" />
 
-        <div class="wake-core" aria-hidden="true">
-          <div class="orbit orbit-one" />
-          <div class="orbit orbit-two" />
-          <div class="core-disc">
-            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-              <path d="M12 2v9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
-              <path d="M7.2 5.7a8 8 0 1 0 9.6 0" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
-            </svg>
+        <div class="console-head">
+          <div>
+            <span class="console-kicker">Wake engine</span>
+            <strong>MX-04 / Auto cycle</strong>
+          </div>
+          <span class="cycle-state"><i aria-hidden="true" />{{ phase === 'ready' ? 'Online' : phase === 'invalid' ? 'Locked' : 'Running' }}</span>
+        </div>
+
+        <div class="machine-window" aria-hidden="true">
+          <div class="warning-bar" />
+
+          <div class="steam-stack">
+            <i /><i /><i />
+          </div>
+
+          <div class="piston-bank">
+            <div class="piston"><i /><span /></div>
+            <div class="piston"><i /><span /></div>
+            <div class="piston"><i /><span /></div>
+          </div>
+
+          <div class="gear-field">
+            <div class="gear gear-main" />
+            <div class="gear gear-small" />
+            <div class="spark-field"><i /><i /><i /></div>
+          </div>
+
+          <div class="conveyor">
+            <div class="conveyor-belt" />
+            <span class="crate crate-one">R</span>
+            <span class="crate crate-two">R</span>
+            <span class="crate crate-three">R</span>
           </div>
         </div>
 
-        <div class="mt-9" aria-live="polite">
-          <div class="flex items-end justify-between gap-4">
+        <div class="console-readout" aria-live="polite">
+          <div class="readout-row">
             <div>
-              <p class="text-[0.66rem] font-semibold uppercase tracking-[0.22em] text-white/35">Current status</p>
-              <h2 class="mt-2 text-xl font-semibold text-stone-100">{{ statusText }}</h2>
+              <p>Current operation</p>
+              <h2>{{ statusText }}</h2>
             </div>
-            <span class="font-mono text-3xl font-light text-lime-300">{{ progress }}%</span>
+            <span class="progress-number">{{ progress }}<small>%</small></span>
           </div>
 
-          <div class="progress-track mt-5" role="progressbar" :aria-valuenow="progress" aria-valuemin="0" aria-valuemax="100">
+          <div class="progress-track" role="progressbar" :aria-valuenow="progress" aria-valuemin="0" aria-valuemax="100">
             <div class="progress-fill" :style="{ width: `${progress}%` }" />
           </div>
 
-          <div class="mt-5 flex justify-between text-[0.7rem] font-medium uppercase tracking-[0.16em] text-white/35">
-            <span>Probe {{ String(attempts).padStart(2, '0') }}</span>
-            <span>{{ String(Math.floor(elapsedSeconds / 60)).padStart(2, '0') }}:{{ String(elapsedSeconds % 60).padStart(2, '0') }}</span>
+          <div class="telemetry">
+            <div><span>Probe</span><strong>{{ String(attempts).padStart(2, '0') }}</strong></div>
+            <div><span>Cycle time</span><strong>{{ String(Math.floor(elapsedSeconds / 60)).padStart(2, '0') }}:{{ String(elapsedSeconds % 60).padStart(2, '0') }}</strong></div>
+            <div><span>Mode</span><strong>Auto</strong></div>
           </div>
         </div>
 
-        <p class="mt-8 border-t border-white/10 pt-5 text-sm leading-6 text-white/40">
+        <p class="console-note">
           {{ phase === 'invalid' ? 'ใช้ URL รูปแบบ /ชื่อ เช่น /rails-starter-kit' : 'Render Free ปกติใช้เวลาตื่นประมาณ 1 นาที กรุณาเปิดหน้านี้ไว้' }}
         </p>
-      </div>
+      </article>
     </section>
+
+    <div class="safety-rail" aria-hidden="true"><span>Automatic machinery</span><span>Keep this window open</span><span>Automatic machinery</span></div>
   </main>
 </template>
