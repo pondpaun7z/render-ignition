@@ -2889,6 +2889,19 @@ body {
 .plant-status { gap: 1rem; }
 .status-live { gap: 0.55rem; color: $acid; }
 
+.github-link {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: rgba(255, 255, 255, 0.48);
+  text-decoration: none;
+  transition: color 180ms ease;
+
+  svg { width: 1rem; height: 1rem; }
+  &:hover { color: var(--state); }
+  &:focus-visible { outline: 2px solid $cream; outline-offset: 4px; }
+}
+
 .theme-switch {
   display: flex;
   align-items: center;
@@ -3333,6 +3346,7 @@ body {
   .plant-mark { gap: 0.6rem; }
   .plant-mark > span:not(.plant-number),
   .status-live { display: none; }
+  .github-link span { display: none; }
   .theme-switch { padding-left: 0.25rem; }
   .theme-switch > span { display: none; }
   .theme-switch select { width: 8.5rem; }
