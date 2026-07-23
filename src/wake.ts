@@ -1,4 +1,8 @@
 const RENDER_NAME = /^[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?$/
+const CUSTOM_DOMAINS: Record<string, string> = {
+  'garage-demo': 'garage-demo.sevenz.app',
+  'rails-starter-kit': 'rails-starter-kit.sevenz.app',
+}
 
 export type MachineStage = 'showcase' | 'ignition' | 'warmup' | 'full-load' | 'online' | 'locked'
 
@@ -18,7 +22,8 @@ export function renderTargetFromPath(pathname: string): string | null {
   try {
     const [rawName, ...subpath] = parts
     const name = decodeURIComponent(rawName).toLowerCase()
-    return RENDER_NAME.test(name) ? `https://${name}.onrender.com/${subpath.join('/')}` : null
+    const host = CUSTOM_DOMAINS[name] ?? `${name}.onrender.com`
+    return RENDER_NAME.test(name) ? `https://${host}/${subpath.join('/')}` : null
   } catch {
     return null
   }

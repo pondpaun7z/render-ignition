@@ -16,13 +16,20 @@ This targets:
 https://my-render-service.onrender.com/
 ```
 
+These service names use custom domains:
+
+```text
+garage-demo       → https://garage-demo.sevenz.app/
+rails-starter-kit → https://rails-starter-kit.sevenz.app/
+```
+
 You can include a subpath after the service name:
 
 ```text
 https://your-gateway.example/my-render-service/dashboard
 ```
 
-This targets `https://my-render-service.onrender.com/dashboard`.
+This targets the configured custom domain when present, otherwise `https://my-render-service.onrender.com/dashboard`.
 
 Append a theme name as a bare query parameter to choose its animation:
 
